@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://kit.fontawesome.com/5fa6fd50f4.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="./style.css" />
+    <title>TO-DO-APP</title>
+  </head>
+  <body>
+    <div class="image"></div>
+    <section class="section-center">
+      <div class="head">
+        <h2>todo</h2>
+        <div>
+          <i class="fa-solid fa-sun"></i>
+          <i class="fa-solid fa-moon"></i>
+        </div>
+      </div>
+      <form class="input">
+        <div class="flex">
+          <span class="input-check-box"></span>
+          <input id="todo" type="text" placeholder="Create a new todo..." />
+        </div>
+      </form>
+      <ul class="list-container">
+        <li class="list-item">
+          <div class="actions">
+            <p class="test"><span></span> items left</p>
+            <div class="task">
+              <p class="action all-action">all</p>
+              <p class="action active-action">active</p>
+              <p class="action completed-action">completed</p>
+            </div>
+            <p class="action clear-completed">clear completed</p>
+          </div>
+        </li>
+      </ul>
+      <section class="bottom">
+        <p class="action all-action">all</p>
+        <p class="action active-action">active</p>
+        <p class="action completed-action">completed</p>
+      </section>
+      <p class="text">Drag and drop to reorder list</p>
+    </section>
+    <script src="./app.js"></script>
+  </body>
+</html>
