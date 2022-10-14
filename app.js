@@ -1,6 +1,7 @@
 const form = document.querySelector(".input");
 const todo = document.getElementById("todo");
 const container = document.querySelector(".list-container");
+const lastItem = document.querySelector(".last-item");
 const text = document.querySelector(".text");
 const bottom = document.querySelector(".bottom");
 const clearCompleted = document.querySelector(".clear-completed");
@@ -10,6 +11,8 @@ const completedAction = document.querySelectorAll(".completed-action");
 const actions = document.querySelectorAll(".action");
 let number = document.querySelector(".actions .test span");
 
+window.addEventListener("DOMContentLoaded", setupItems);
+
 form.addEventListener("submit", addItem);
 
 function addItem(e) {
@@ -17,43 +20,44 @@ function addItem(e) {
   const value = todo.value;
   const id = new Date().getTime().toString();
   if (value) {
-    const element = document.createElement("li");
-    const last = container.lastElementChild;
-    element.classList.add("list-item");
-    const attr = document.createAttribute("data-id");
-    const active = document.createAttribute("data-active");
-    attr.value = id;
-    active.value = false;
-    element.setAttributeNode(attr);
-    element.setAttributeNode(active);
-    element.innerHTML = `<div class="flex">
-            <span class="check-box">
-              <i class="fa-solid fa-check"></i>
-            </span>
-            <p>${value}</p>
-            <button class="delete">
-              <span class="x-icon"></span>
-            </button>
-          </div>`;
-    const deleteBtn = element.querySelector(".delete");
-    const checkBox = element.querySelector(".check-box");
-    deleteBtn.addEventListener("click", deleteItem);
-    checkBox.addEventListener("click", checkItem);
-    container.insertBefore(element, last);
+    // const element = document.createElement("li");
+    // element.classList.add("list-item");
+    // const attr = document.createAttribute("data-id");
+    // const active = document.createAttribute("data-active");
+    // attr.value = id;
+    // active.value = false;
+    // element.setAttributeNode(attr);
+    // element.setAttributeNode(active);
+    // element.innerHTML = `<div class="flex">
+    //         <span class="check-box">
+    //           <i class="fa-solid fa-check"></i>
+    //         </span>
+    //         <p>${value}</p>
+    //         <button class="delete">
+    //           <span class="x-icon"></span>
+    //         </button>
+    //       </div>`;
+    // const deleteBtn = element.querySelector(".delete");
+    // const checkBox = element.querySelector(".check-box");
+    // deleteBtn.addEventListener("click", deleteItem);
+    // checkBox.addEventListener("click", checkItem);
+    // container.insertBefore(element, lastItem);
+    createListItem(id, value, "false");
     container.classList.add("show-container");
     text.classList.add("show-container");
     bottom.classList.add("show-container");
     todo.value = "";
     updateNumber();
-  } else {
-    console.log("empty");
+    addToLocalStorage(id, value, "false");
   }
 }
 
 function deleteItem(e) {
   const element = e.currentTarget.parentElement.parentElement;
+  const id = element.dataset.id;
   container.removeChild(element);
   updateNumber();
+  deleteFromLocalStorage(id);
   if (container.children.length === 1) {
     container.classList.remove("show-container");
     text.classList.remove("show-container");
@@ -63,6 +67,7 @@ function deleteItem(e) {
 
 function checkItem(e) {
   const element = e.currentTarget.parentElement.parentElement;
+  const id = element.dataset.id;
   element.classList.toggle("checked");
   let active = activeState(element);
   if (active) {
@@ -71,6 +76,7 @@ function checkItem(e) {
     element.dataset.active = "false";
   }
   updateNumber();
+  editLocalStorage(id, element);
 }
 
 function activeState(e) {
@@ -101,6 +107,8 @@ clearCompleted.addEventListener("click", function () {
   });
   active.forEach(function (x) {
     container.removeChild(x);
+    let id = x.dataset.id;
+    deleteFromLocalStorage(id);
   });
   updateNumber();
   if (container.children.length === 1) {
@@ -119,10 +127,6 @@ allAction.forEach(function (btn) {
       x.classList.add("selected");
     });
     const listItems = document.querySelectorAll(".list-item");
-    // const list = [...listItems];
-    // let filter = list.map(function (x) {
-    //   return x;
-    // });
     listItems.forEach(function (x) {
       x.style.display = "list-item";
     });
@@ -164,4 +168,81 @@ function filterList(value) {
       x.style.display = "none";
     }
   });
+}
+
+function setupItems() {
+  let items = getLocalStorage();
+  if (items.length) {
+    items.forEach(function (item) {
+      createListItem(item.id, item.value, item.active);
+    });
+    updateNumber();
+    container.classList.add("show-container");
+    text.classList.add("show-container");
+    bottom.classList.add("show-container");
+  }
+}
+
+function addToLocalStorage(id, value, active) {
+  const todoItem = { id, value, active };
+  let items = getLocalStorage();
+  items.push(todoItem);
+  localStorage.setItem("todoList", JSON.stringify(items));
+}
+
+function deleteFromLocalStorage(id) {
+  let items = getLocalStorage();
+  items = items.filter(function (item) {
+    return item.id !== id;
+  });
+  localStorage.setItem("todoList", JSON.stringify(items));
+}
+
+function editLocalStorage(id, element) {
+  let items = getLocalStorage();
+  const activeState = element.dataset.active;
+  //   console.log(activeState);
+  items = items.map(function (item) {
+    if (item.id == id) {
+      item.active = activeState;
+    }
+    return item;
+  });
+  localStorage.setItem("todoList", JSON.stringify(items));
+}
+
+function getLocalStorage() {
+  return localStorage.getItem("todoList")
+    ? JSON.parse(localStorage.getItem("todoList"))
+    : [];
+}
+
+function createListItem(id, value, activeState) {
+  const element = document.createElement("li");
+  element.classList.add("list-item");
+  const attr = document.createAttribute("data-id");
+  const active = document.createAttribute("data-active");
+  attr.value = id;
+  active.value = activeState;
+  element.setAttributeNode(attr);
+  element.setAttributeNode(active);
+  element.innerHTML = `<div class="flex">
+            <span class="check-box">
+              <i class="fa-solid fa-check"></i>
+            </span>
+            <p>${value}</p>
+            <button class="delete">
+              <span class="x-icon"></span>
+            </button>
+          </div>`;
+  if (element.dataset.active == "true") {
+    element.classList.add("checked");
+  } else {
+    element.classList.remove("checked");
+  }
+  const deleteBtn = element.querySelector(".delete");
+  const checkBox = element.querySelector(".check-box");
+  deleteBtn.addEventListener("click", deleteItem);
+  checkBox.addEventListener("click", checkItem);
+  container.insertBefore(element, lastItem);
 }
