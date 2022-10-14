@@ -3,15 +3,12 @@ const todo = document.getElementById("todo");
 const container = document.querySelector(".list-container");
 const text = document.querySelector(".text");
 const bottom = document.querySelector(".bottom");
+const clearCompleted = document.querySelector(".clear-completed");
+const allAction = document.querySelectorAll(".all-action");
+const activeAction = document.querySelectorAll(".active-action");
+const completedAction = document.querySelectorAll(".completed-action");
+const actions = document.querySelectorAll(".action");
 let number = document.querySelector(".actions .test span");
-// let activeState = false;
-
-// checkBoxes.forEach(function (checkBox) {
-//   checkBox.addEventListener("click", function (e) {
-//     const element = e.currentTarget.parentElement.parentElement;
-//     element.classList.toggle("checked");
-//   });
-// });
 
 form.addEventListener("submit", addItem);
 
@@ -94,4 +91,66 @@ function updateNumber() {
     }
   });
   number.textContent = counter;
+}
+
+clearCompleted.addEventListener("click", function () {
+  const listItems = document.querySelectorAll(".list-item");
+  const list = [...listItems];
+  let active = list.filter(function (x) {
+    return x.dataset.active == "true";
+  });
+  active.forEach(function (x) {
+    container.removeChild(x);
+  });
+  updateNumber();
+  if (container.children.length === 1) {
+    container.classList.remove("show-container");
+    text.classList.remove("show-container");
+    bottom.classList.remove("show-container");
+  }
+});
+
+allAction.forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    actions.forEach(function (x) {
+      x.classList.remove("selected");
+    });
+    allAction.forEach(function (x) {
+      x.classList.add("selected");
+    });
+    const listItems = document.querySelectorAll(".list-item");
+    const list = [...listItems];
+    let all = list.map(function (x) {
+      return x;
+    });
+    displayList(all);
+  });
+});
+
+activeAction.forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    actions.forEach(function (x) {
+      x.classList.remove("selected");
+    });
+    activeAction.forEach(function (x) {
+      x.classList.add("selected");
+    });
+  });
+});
+
+completedAction.forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    actions.forEach(function (x) {
+      x.classList.remove("selected");
+    });
+    completedAction.forEach(function (x) {
+      x.classList.add("selected");
+    });
+  });
+});
+
+function displayList(arr) {
+  arr.forEach(function (x) {
+    container.appendChild(x);
+  });
 }
