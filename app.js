@@ -119,11 +119,13 @@ allAction.forEach(function (btn) {
       x.classList.add("selected");
     });
     const listItems = document.querySelectorAll(".list-item");
-    const list = [...listItems];
-    let all = list.map(function (x) {
-      return x;
+    // const list = [...listItems];
+    // let filter = list.map(function (x) {
+    //   return x;
+    // });
+    listItems.forEach(function (x) {
+      x.style.display = "list-item";
     });
-    displayList(all);
   });
 });
 
@@ -135,6 +137,7 @@ activeAction.forEach(function (btn) {
     activeAction.forEach(function (x) {
       x.classList.add("selected");
     });
+    filterList("true");
   });
 });
 
@@ -146,11 +149,19 @@ completedAction.forEach(function (btn) {
     completedAction.forEach(function (x) {
       x.classList.add("selected");
     });
+    filterList("false");
   });
 });
 
-function displayList(arr) {
-  arr.forEach(function (x) {
-    container.appendChild(x);
+function filterList(value) {
+  const listItems = document.querySelectorAll(".list-item");
+  const list = [...listItems];
+  listItems.forEach(function (x) {
+    x.style.display = "list-item";
+  });
+  let filter = list.map(function (x) {
+    if (x.dataset.active == value) {
+      x.style.display = "none";
+    }
   });
 }
