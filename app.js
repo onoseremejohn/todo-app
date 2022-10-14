@@ -9,39 +9,31 @@ const allAction = document.querySelectorAll(".all-action");
 const activeAction = document.querySelectorAll(".active-action");
 const completedAction = document.querySelectorAll(".completed-action");
 const actions = document.querySelectorAll(".action");
+const themeToggler = document.querySelector(".head div");
+
 let number = document.querySelector(".actions .test span");
 
 window.addEventListener("DOMContentLoaded", setupItems);
 
 form.addEventListener("submit", addItem);
 
+themeToggler.addEventListener("click", function () {
+  let element = document.body;
+  element.classList.toggle("light-mode");
+  let theme = getThemeStorage();
+  if (element.classList.contains("light-mode")) {
+    theme.theme = "light-mode";
+  } else {
+    theme.theme = "dark-mode";
+  }
+  localStorage.setItem("todoTheme", JSON.stringify(theme));
+});
+
 function addItem(e) {
   e.preventDefault();
   const value = todo.value;
   const id = new Date().getTime().toString();
   if (value) {
-    // const element = document.createElement("li");
-    // element.classList.add("list-item");
-    // const attr = document.createAttribute("data-id");
-    // const active = document.createAttribute("data-active");
-    // attr.value = id;
-    // active.value = false;
-    // element.setAttributeNode(attr);
-    // element.setAttributeNode(active);
-    // element.innerHTML = `<div class="flex">
-    //         <span class="check-box">
-    //           <i class="fa-solid fa-check"></i>
-    //         </span>
-    //         <p>${value}</p>
-    //         <button class="delete">
-    //           <span class="x-icon"></span>
-    //         </button>
-    //       </div>`;
-    // const deleteBtn = element.querySelector(".delete");
-    // const checkBox = element.querySelector(".check-box");
-    // deleteBtn.addEventListener("click", deleteItem);
-    // checkBox.addEventListener("click", checkItem);
-    // container.insertBefore(element, lastItem);
     createListItem(id, value, "false");
     container.classList.add("show-container");
     text.classList.add("show-container");
@@ -172,6 +164,10 @@ function filterList(value) {
 
 function setupItems() {
   let items = getLocalStorage();
+  let theme = getThemeStorage();
+  if (theme.theme == "light-mode") {
+    document.body.classList.add("light-mode");
+  }
   if (items.length) {
     items.forEach(function (item) {
       createListItem(item.id, item.value, item.active);
@@ -215,6 +211,12 @@ function getLocalStorage() {
   return localStorage.getItem("todoList")
     ? JSON.parse(localStorage.getItem("todoList"))
     : [];
+}
+
+function getThemeStorage() {
+  return localStorage.getItem("todoTheme")
+    ? JSON.parse(localStorage.getItem("todoTheme"))
+    : {};
 }
 
 function createListItem(id, value, activeState) {
