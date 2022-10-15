@@ -27,19 +27,18 @@
           <input id="todo" type="text" placeholder="Create a new todo..." />
         </div>
       </form>
-      <ul class="list-container">
-        <li class="list-item last-item">
-          <div class="actions">
-            <p class="test"><span></span> items left</p>
-            <div class="task">
-              <p class="action all-action selected">all</p>
-              <p class="action active-action">active</p>
-              <p class="action completed-action">completed</p>
-            </div>
-            <p class="action clear-completed">clear completed</p>
+      <ul class="list-container"></ul>
+      <div class="last-item">
+        <div class="actions">
+          <p class="test"><span></span> items left</p>
+          <div class="task">
+            <p class="action all-action selected">all</p>
+            <p class="action active-action">active</p>
+            <p class="action completed-action">completed</p>
           </div>
-        </li>
-      </ul>
+          <p class="action clear-completed">clear completed</p>
+        </div>
+      </div>
       <section class="bottom">
         <p class="action all-action selected">all</p>
         <p class="action active-action">active</p>
@@ -47,6 +46,19 @@
       </section>
       <p class="text">Drag and drop to reorder list</p>
     </section>
+    <footer class="footer">
+      <p>
+        Challenge by
+        <a href="https://frontendmentor.io" target="_blank">Frontend Mentor.</a>
+        Coded by
+        <a
+          href="https://www.linkedin.com/in/onosereme-emuemhonjie-5a5454161/"
+          target="_blank"
+          >Onosereme Emuemhonjie.</a
+        >
+      </p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <script src="./app.js"></script>
   </body>
 </html>

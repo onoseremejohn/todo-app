@@ -36,6 +36,7 @@ function addItem(e) {
   if (value) {
     createListItem(id, value, "false");
     container.classList.add("show-container");
+    lastItem.classList.add("show-container");
     text.classList.add("show-container");
     bottom.classList.add("show-container");
     todo.value = "";
@@ -50,10 +51,11 @@ function deleteItem(e) {
   container.removeChild(element);
   updateNumber();
   deleteFromLocalStorage(id);
-  if (container.children.length === 1) {
+  if (container.children.length == 0) {
     container.classList.remove("show-container");
     text.classList.remove("show-container");
     bottom.classList.remove("show-container");
+    lastItem.classList.remove("show-container");
   }
 }
 
@@ -103,8 +105,9 @@ clearCompleted.addEventListener("click", function () {
     deleteFromLocalStorage(id);
   });
   updateNumber();
-  if (container.children.length === 1) {
+  if (container.children.length == 0) {
     container.classList.remove("show-container");
+    lastItem.classList.remove("show-container");
     text.classList.remove("show-container");
     bottom.classList.remove("show-container");
   }
@@ -174,6 +177,7 @@ function setupItems() {
     });
     updateNumber();
     container.classList.add("show-container");
+    lastItem.classList.add("show-container");
     text.classList.add("show-container");
     bottom.classList.add("show-container");
   }
@@ -246,5 +250,7 @@ function createListItem(id, value, activeState) {
   const checkBox = element.querySelector(".check-box");
   deleteBtn.addEventListener("click", deleteItem);
   checkBox.addEventListener("click", checkItem);
-  container.insertBefore(element, lastItem);
+  container.appendChild(element);
 }
+
+Sortable.create(container);
